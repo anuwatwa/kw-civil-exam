@@ -113,6 +113,8 @@ select{cursor:pointer}
   color:var(--ink2);padding:5px 11px;border-radius:99px;cursor:pointer
 }
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.core{border-color:var(--accentLine)}
+.famnote{font-size:11.5px;color:var(--star);background:var(--starSoft);border:1px solid var(--starLine);border-radius:5px;padding:2px 7px;font-weight:500}
 :root[data-theme="dark"] .chip[aria-pressed="true"],
 :root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#08181C}
 .grow{flex:1 1 auto}
@@ -216,7 +218,7 @@ td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace}
 
 <div class="top">
   <div class="topin">
-    <div class="brand"><b>คลังข้อสอบ กว. โยธา</b><span>3,359 ข้อ · 10 วิชา</span></div>
+    <div class="brand"><b>คลังข้อสอบ กว. โยธา</b><span id="brandsub">3,359 ข้อ · 10 วิชา</span></div>
     <div class="tabs" role="tablist">
       <button role="tab" id="tab-practice" aria-selected="true">ฝึกทำข้อสอบ</button>
       <button role="tab" id="tab-search" aria-selected="false">ค้นหาโจทย์คล้าย</button>
@@ -236,7 +238,8 @@ td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace}
         <div class="panel toolbar">
           <select id="topicsel" aria-label="เลือกหัวข้อ"></select>
           <div class="chips" role="group" aria-label="กรองข้อสอบ">
-            <button class="chip" id="f-all" aria-pressed="true">ทั้งหมด</button>
+            <button class="chip core" id="f-core" aria-pressed="true">ชุดแกน</button>
+            <button class="chip" id="f-all" aria-pressed="false">ทั้งหมด</button>
             <button class="chip" id="f-new" aria-pressed="false">ยังไม่ได้ทำ</button>
             <button class="chip" id="f-wrong" aria-pressed="false">เคยตอบผิด</button>
             <button class="chip" id="f-star" aria-pressed="false">ติดดาว</button>
@@ -301,6 +304,9 @@ function boot(d){
   DATA=d; Q=d.questions; SUBJ=d.subjects;
   SUBJ.forEach(function(s){ byCode[s.code]=s; });
   document.getElementById("boot").hidden=true;
+  var core=d.questions.filter(function(x){return x.k;}).length;
+  var bs=document.getElementById("brandsub");
+  if(bs) bs.textContent=Q.length.toLocaleString()+" ข้อ · ชุดแกน "+core.toLocaleString()+" ข้อ";
   buildRail(); buildSearchSubj();
   setSubject(SUBJ[0].code);
   show("practice");
@@ -370,11 +376,16 @@ function show(name){
 });
 
 /* ---------------- subject rail ---------------- */
-var curSubj=null, curTopic="*", curFilter="all", order=[], pos=0, shuffled=false;
+var curSubj=null, curTopic="*", curFilter="core", order=[], pos=0, shuffled=false;
 
+function inScope(q){ return curFilter==="core" ? !!q.k : true; }
 function subjProgress(code){
   var tot=0, done=0;
-  for(var i=0;i<Q.length;i++) if(Q[i].s===code){ tot++; if(state[Q[i].i] && state[Q[i].i].r) done++; }
+  for(var i=0;i<Q.length;i++){
+    var q=Q[i];
+    if(q.s!==code || !inScope(q)) continue;
+    tot++; if(state[q.i] && state[q.i].r) done++;
+  }
   return {tot:tot,done:done};
 }
 
@@ -414,7 +425,7 @@ function refreshRailCounts(){
 function setSubject(code){
   curSubj=code; curTopic="*";
   var topics={}, n=0;
-  Q.forEach(function(q){ if(q.s===code){ topics[q.t]=(topics[q.t]||0)+1; n++; } });
+  Q.forEach(function(q){ if(q.s===code && inScope(q)){ topics[q.t]=(topics[q.t]||0)+1; n++; } });
   var sel=document.getElementById("topicsel");
   sel.innerHTML="";
   var o=document.createElement("option"); o.value="*"; o.textContent="ทุกหัวข้อ ("+n+" ข้อ)"; sel.appendChild(o);
@@ -426,20 +437,21 @@ function setSubject(code){
 }
 
 /* filters */
-var fmap={all:"f-all",new:"f-new",wrong:"f-wrong",star:"f-star"};
+var fmap={core:"f-core",all:"f-all",new:"f-new",wrong:"f-wrong",star:"f-star"};
 Object.keys(fmap).forEach(function(k){
   document.getElementById(fmap[k]).onclick=function(){
     curFilter=k;
     Object.keys(fmap).forEach(function(j){
       document.getElementById(fmap[j]).setAttribute("aria-pressed", j===k?"true":"false");
     });
-    rebuild();
+    setSubject(curSubj);
   };
 });
 document.getElementById("shuffle").onclick=function(){ shuffled=!shuffled; rebuild(); };
 
 function passes(q){
   var s=state[q.i]||{};
+  if(curFilter==="core")  return !!q.k;
   if(curFilter==="new")   return !s.r;
   if(curFilter==="wrong") return s.w>0;
   if(curFilter==="star")  return !!s.star;
@@ -449,6 +461,7 @@ function rebuild(){
   order=Q.filter(function(q){
     return q.s===curSubj && (curTopic==="*"||q.t===curTopic) && passes(q);
   });
+  order.sort(function(a,b){ return a.pr-b.pr; });   // most-distinct themes first
   if(shuffled){
     for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
   }
@@ -473,6 +486,7 @@ function renderQ(){
   var h='<div class="qhead">'+
     '<span class="tag">'+esc(q.s)+'</span>'+
     '<span class="topic" title="'+esc(q.t)+'">'+esc(q.t)+'</span>'+
+    (q.fs>1 ? '<span class="famnote">แนวนี้มีอีก '+(q.fs-1)+' ข้อในคลัง</span>' : '')+
     '<span class="pos">ข้อ '+(pos+1)+' / '+order.length+'</span>'+
     '</div><div class="qbody">';
 
@@ -671,36 +685,45 @@ document.getElementById("qinput").addEventListener("keydown",function(e){
 /* ---------------- stats ---------------- */
 function renderStats(){
   var v=document.getElementById("view-stats");
-  var done=0,corr=0,wrong=0,star=0;
+  var done=0,corr=0,wrong=0,star=0,coreN=0,coreDone=0;
   Q.forEach(function(q){
+    if(q.k) coreN++;
     var s=state[q.i]; if(!s) return;
-    if(s.r) done++;
+    if(s.r){ done++; if(q.k) coreDone++; }
     if(s.c) corr+=s.c;
     if(s.w) wrong+=s.w;
     if(s.star) star++;
   });
   var acc = (corr+wrong)? Math.round(corr/(corr+wrong)*100) : 0;
   var h='<div class="statgrid">'+
-    '<div class="panel stat"><div class="lab">ทำไปแล้ว</div><div class="val">'+done+'<span style="font-size:14px;color:var(--ink3)"> / '+Q.length+'</span></div></div>'+
+    '<div class="panel stat"><div class="lab">ชุดแกน</div><div class="val">'+coreDone+'<span style="font-size:14px;color:var(--ink3)"> / '+coreN+'</span></div></div>'+
+    '<div class="panel stat"><div class="lab">ทำไปแล้ว (ทั้งคลัง)</div><div class="val">'+done+'<span style="font-size:14px;color:var(--ink3)"> / '+Q.length+'</span></div></div>'+
     '<div class="panel stat"><div class="lab">ความแม่นยำ</div><div class="val">'+acc+'%</div></div>'+
     '<div class="panel stat"><div class="lab">ตอบผิดสะสม</div><div class="val">'+wrong+'</div></div>'+
     '<div class="panel stat"><div class="lab">ติดดาวไว้</div><div class="val">'+star+'</div></div>'+
     '</div>';
   h+='<div class="panel tablewrap"><table><thead><tr>'+
-     '<th>วิชา</th><th class="num">ทั้งหมด</th><th class="num">ทำแล้ว</th><th class="num">ผิด</th><th class="num">คืบหน้า</th>'+
+     '<th>วิชา</th><th class="num">ออกสอบ</th><th class="num">ชุดแกน</th>'+
+     '<th class="num">ทำแล้ว</th><th class="num">ผิด</th><th class="num">คืบหน้าชุดแกน</th><th class="num">คลังรวม</th>'+
      '</tr></thead><tbody>';
   SUBJ.forEach(function(s){
-    var tot=0,d=0,w=0;
+    var tot=0,coreN=0,coreDone=0,w=0;
     Q.forEach(function(q){
-      if(q.s!==s.code) return; tot++;
-      var x=state[q.i]; if(!x) return;
-      if(x.r) d++; if(x.w) w+=x.w;
+      if(q.s!==s.code) return;
+      tot++;
+      var x=state[q.i];
+      if(q.k){ coreN++; if(x&&x.r) coreDone++; }
+      if(x&&x.w) w+=x.w;
     });
     h+='<tr><td>'+esc(s.th)+' <span style="color:var(--ink3);font-size:11.5px">'+esc(s.code)+'</span></td>'+
-       '<td class="num">'+tot+'</td><td class="num">'+d+'</td><td class="num">'+w+'</td>'+
-       '<td class="num">'+(tot?Math.round(d/tot*100):0)+'%</td></tr>';
+       '<td class="num">'+(s.exam||"-")+'</td><td class="num">'+coreN+'</td>'+
+       '<td class="num">'+coreDone+'</td><td class="num">'+w+'</td>'+
+       '<td class="num">'+(coreN?Math.round(coreDone/coreN*100):0)+'%</td>'+
+       '<td class="num" style="color:var(--ink3)">'+tot+'</td></tr>';
   });
-  h+='</tbody></table></div>';
+  h+='</tbody></table></div>'+
+     '<p class="hint" style="margin-top:10px">“ออกสอบ” คือจำนวนข้อที่วิชานั้นออกจริงในข้อสอบ (รวม 200 ข้อ) '+
+     'ชุดแกนจัดสัดส่วนตามนี้ ไม่ใช่ตามจำนวนข้อในคลัง</p>';
   h+='<div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap">'+
      '<button class="btn" id="resetall">ล้างความคืบหน้าทั้งหมด</button></div>'+
      '<div class="panel stat" style="margin-top:14px"><div class="lab">ใช้งานออฟไลน์</div>'+
