@@ -1,0 +1,746 @@
+<title>คลังข้อสอบ กว. โยธา</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#0E5C6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ข้อสอบ กว.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#EEF1F4; --surface:#FFFFFF; --surface2:#F6F8FA; --surface3:#EAEFF3;
+  --line:#D5DCE3; --line2:#B6C2CC;
+  --ink:#16222C; --ink2:#4A5C69; --ink3:#7C8D9A;
+  --accent:#0E5C6B; --accentSoft:#DBEDF1; --accentLine:#93C4CE;
+  --good:#146C43; --goodSoft:#DEF3E7; --goodLine:#8FCCAC;
+  --bad:#A82A22; --badSoft:#FAE5E3; --badLine:#E0A19C;
+  --star:#9C5B0C; --starSoft:#FAEEDB; --starLine:#DDB878;
+  --shadow:0 1px 2px rgba(20,34,44,.06),0 8px 24px -12px rgba(20,34,44,.18);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1418; --surface:#161F25; --surface2:#1C272E; --surface3:#223038;
+    --line:#2B3841; --line2:#3D4E59;
+    --ink:#E3EBF0; --ink2:#A3B5C0; --ink3:#718794;
+    --accent:#52C3D6; --accentSoft:#10323A; --accentLine:#2A626F;
+    --good:#5FD497; --goodSoft:#123026; --goodLine:#2D6A4F;
+    --bad:#FF8F84; --badSoft:#351C1A; --badLine:#7A3B34;
+    --star:#E5B267; --starSoft:#32260F; --starLine:#6D5423;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1418; --surface:#161F25; --surface2:#1C272E; --surface3:#223038;
+  --line:#2B3841; --line2:#3D4E59;
+  --ink:#E3EBF0; --ink2:#A3B5C0; --ink3:#718794;
+  --accent:#52C3D6; --accentSoft:#10323A; --accentLine:#2A626F;
+  --good:#5FD497; --goodSoft:#123026; --goodLine:#2D6A4F;
+  --bad:#FF8F84; --badSoft:#351C1A; --badLine:#7A3B34;
+  --star:#E5B267; --starSoft:#32260F; --starLine:#6D5423;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.62; -webkit-text-size-adjust:100%;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.top{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+}
+.topin{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:9px;margin-right:auto;min-width:0}
+.brand b{font-weight:700;font-size:16px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{font-size:11.5px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.tabs{display:flex;gap:2px;background:var(--surface3);padding:3px;border-radius:9px}
+.tabs button{
+  font:inherit;font-size:13.5px;font-weight:500;border:0;background:none;color:var(--ink2);
+  padding:6px 13px;border-radius:7px;cursor:pointer;white-space:nowrap
+}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1);font-weight:600}
+.iconbtn{
+  font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink2);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;display:grid;place-items:center;font-size:15px
+}
+.iconbtn:hover{border-color:var(--line2);color:var(--ink)}
+main{max-width:1180px;margin:0 auto;padding:18px 16px 72px}
+
+/* ---------- subject rail ---------- */
+.layout{display:grid;grid-template-columns:238px 1fr;gap:20px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:14px}
+.railgroup>h3{
+  margin:0 0 6px;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)
+}
+.subjlist{display:flex;flex-direction:column;gap:3px}
+.subj{
+  display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:9px;
+  padding:7px 9px;border-radius:8px;border:1px solid transparent;background:none;
+  font:inherit;text-align:left;cursor:pointer;color:var(--ink2);width:100%
+}
+.subj:hover{background:var(--surface2)}
+.subj[aria-current="true"]{background:var(--surface);border-color:var(--accentLine);color:var(--ink);box-shadow:var(--shadow)}
+.subj .code{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.04em;
+  color:var(--accent);background:var(--accentSoft);border-radius:4px;padding:3px 0;text-align:center
+}
+.subj .nm{font-size:13.4px;line-height:1.35;min-width:0}
+.subj .ct{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.bar{height:3px;border-radius:2px;background:var(--surface3);overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--good)}
+
+/* ---------- toolbar ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.toolbar{padding:11px 14px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+select,.txt{
+  font:inherit;font-size:13.5px;color:var(--ink);background:var(--surface2);
+  border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:100%
+}
+select{cursor:pointer}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{
+  font:inherit;font-size:12.5px;font-weight:500;border:1px solid var(--line);background:var(--surface2);
+  color:var(--ink2);padding:5px 11px;border-radius:99px;cursor:pointer
+}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#08181C}
+.grow{flex:1 1 auto}
+
+/* ---------- question card ---------- */
+.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--surface2);border-radius:var(--r) var(--r) 0 0}
+.tag{font-size:11px;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:5px;background:var(--accentSoft);color:var(--accent)}
+.topic{font-size:12.5px;color:var(--ink3);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 140px}
+.qbody{padding:18px 20px 20px}
+.stem{font-size:15.8px;line-height:1.72;margin:0 0 4px;white-space:pre-wrap;overflow-wrap:anywhere}
+.figwrap{margin:14px 0 4px;border:1px solid var(--line);border-radius:8px;background:#fff;overflow-x:auto;padding:6px;position:relative;cursor:zoom-in}
+.figwrap img{display:block;max-width:100%;height:auto;margin:0 auto}
+.figwrap.zoom{cursor:zoom-out}
+.figwrap.zoom img{max-width:none;width:200%;margin:0}
+.zoomhint{
+  position:absolute;top:8px;right:8px;font-size:10.5px;font-weight:600;letter-spacing:.03em;
+  background:rgba(22,34,44,.72);color:#fff;border-radius:5px;padding:3px 7px;pointer-events:none
+}
+.fignote{font-size:11.5px;color:var(--ink3);margin:6px 2px 0}
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+.opt{
+  display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:start;text-align:left;
+  font:inherit;font-size:14.6px;line-height:1.6;padding:11px 13px;border-radius:9px;
+  border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer;
+  overflow-wrap:anywhere
+}
+.opt:hover:not(:disabled){border-color:var(--line2);background:var(--surface3)}
+.opt:disabled{cursor:default}
+.opt .k{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  background:var(--surface3);border-radius:5px;padding:2px 0;text-align:center;color:var(--ink2)
+}
+.opt.correct{background:var(--goodSoft);border-color:var(--goodLine)}
+.opt.correct .k{background:var(--good);color:var(--surface)}
+.opt.wrong{background:var(--badSoft);border-color:var(--badLine)}
+.opt.wrong .k{background:var(--bad);color:var(--surface)}
+.verdict{margin-top:14px;font-size:13.8px;font-weight:500;display:flex;align-items:center;gap:8px}
+.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.qfoot{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{
+  font:inherit;font-size:13.8px;font-weight:500;border:1px solid var(--line);background:var(--surface2);
+  color:var(--ink);padding:8px 15px;border-radius:8px;cursor:pointer
+}
+.btn:hover{border-color:var(--line2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+:root[data-theme="dark"] .btn.primary{color:#08181C}
+.btn:disabled{opacity:.42;cursor:default}
+.btn.starred{background:var(--starSoft);border-color:var(--starLine);color:var(--star)}
+.pos{font-size:12.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+
+/* ---------- search ---------- */
+.searchbox{padding:16px}
+textarea{
+  width:100%;font:inherit;font-size:15px;line-height:1.65;color:var(--ink);
+  background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:12px 14px;
+  min-height:104px;resize:vertical
+}
+textarea:focus,select:focus,.opt:focus-visible,.btn:focus-visible,.chip:focus-visible,.subj:focus-visible,.iconbtn:focus-visible,.tabs button:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px
+}
+.hint{font-size:12.5px;color:var(--ink3);margin:9px 2px 0;line-height:1.55}
+.res{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.rescard{padding:14px 16px}
+.resmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.score{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;
+  background:var(--surface3);color:var(--ink2)
+}
+.score.hi{background:var(--goodSoft);color:var(--good)}
+.score.mid{background:var(--starSoft);color:var(--star)}
+.resq{font-size:14.8px;line-height:1.68;margin:0;overflow-wrap:anywhere}
+.ansline{margin-top:11px;padding:10px 13px;border-radius:8px;background:var(--goodSoft);border:1px solid var(--goodLine);font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.ansline b{color:var(--good)}
+.otheropts{margin-top:9px;font-size:13.2px;color:var(--ink2);line-height:1.7}
+.otheropts div{overflow-wrap:anywhere}
+.empty{padding:40px 20px;text-align:center;color:var(--ink3);font-size:14px}
+
+/* ---------- stats ---------- */
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat{padding:14px 16px}
+.stat .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.stat .val{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:600;line-height:1.25;margin-top:3px}
+table{width:100%;border-collapse:collapse;font-size:13.6px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace}
+.tablewrap{overflow-x:auto;border-radius:var(--r)}
+
+.loading{padding:60px 20px;text-align:center;color:var(--ink3)}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .rail{position:static;flex-direction:row;overflow-x:auto;gap:10px;padding-bottom:4px;margin:-2px 0 4px}
+  .railgroup{flex:0 0 auto}
+  .subjlist{flex-direction:row;gap:6px}
+  .subj{width:auto;grid-template-columns:auto auto;white-space:nowrap}
+  .subj .nm{font-size:13px}
+  .subj .ct,.bar{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="top">
+  <div class="topin">
+    <div class="brand"><b>คลังข้อสอบ กว. โยธา</b><span>3,359 ข้อ · 10 วิชา</span></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-practice" aria-selected="true">ฝึกทำข้อสอบ</button>
+      <button role="tab" id="tab-search" aria-selected="false">ค้นหาโจทย์คล้าย</button>
+      <button role="tab" id="tab-stats" aria-selected="false">ความคืบหน้า</button>
+    </div>
+    <button class="iconbtn" id="themebtn" title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+  </div>
+</div>
+
+<main>
+  <div id="boot" class="panel loading">กำลังโหลดคลังข้อสอบ…</div>
+
+  <div id="view-practice" hidden>
+    <div class="layout">
+      <nav class="rail" id="rail" aria-label="เลือกวิชา"></nav>
+      <div>
+        <div class="panel toolbar">
+          <select id="topicsel" aria-label="เลือกหัวข้อ"></select>
+          <div class="chips" role="group" aria-label="กรองข้อสอบ">
+            <button class="chip" id="f-all" aria-pressed="true">ทั้งหมด</button>
+            <button class="chip" id="f-new" aria-pressed="false">ยังไม่ได้ทำ</button>
+            <button class="chip" id="f-wrong" aria-pressed="false">เคยตอบผิด</button>
+            <button class="chip" id="f-star" aria-pressed="false">ติดดาว</button>
+          </div>
+          <span class="grow"></span>
+          <button class="btn" id="shuffle">สุ่มลำดับ</button>
+        </div>
+        <div class="panel" id="qcard"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-search" hidden>
+    <div class="panel searchbox">
+      <label for="qinput" style="display:block;font-size:13.5px;font-weight:600;margin-bottom:8px">
+        วางโจทย์ที่ทำไม่ได้ลงไป แล้วกดค้นหา
+      </label>
+      <textarea id="qinput" placeholder="เช่น  คานยื่นยาว 1.50 เมตร เสริมเหล็กรับแรงดึง 4-RB15 จงหาหน่วยแรงยึดเหนี่ยว…"></textarea>
+      <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:11px">
+        <button class="btn primary" id="dosearch">ค้นหาโจทย์คล้าย</button>
+        <select id="searchsubj" aria-label="จำกัดวิชา"></select>
+        <span class="grow"></span>
+        <button class="btn" id="clearsearch">ล้าง</button>
+      </div>
+      <p class="hint">
+        พิมพ์เท่าที่จำได้ก็พอ ระบบเทียบด้วยตัวอักษรซ้อน (character n-gram) จึงทนต่อคำที่พิมพ์ผิดหรือตกหล่น
+        และให้น้ำหนักพิเศษกับตัวเลข/หน่วยในโจทย์
+      </p>
+    </div>
+    <div class="res" id="results"></div>
+  </div>
+
+  <div id="view-stats" hidden></div>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- storage ---------------- */
+var LSK="kwcivil.v1", state={};
+function load(){ try{ state=JSON.parse(localStorage.getItem(LSK)||"{}")||{}; }catch(e){ state={}; } }
+function save(){ try{ localStorage.setItem(LSK,JSON.stringify(state)); }catch(e){} }
+function st(i){ return state[i]||(state[i]={}); }
+load();
+
+var THEMEK="kwcivil.theme";
+try{ var th=localStorage.getItem(THEMEK); if(th) document.documentElement.setAttribute("data-theme",th); }catch(e){}
+document.getElementById("themebtn").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  if(!cur) cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light";
+  var next = cur==="dark" ? "light":"dark";
+  document.documentElement.setAttribute("data-theme",next);
+  try{ localStorage.setItem(THEMEK,next); }catch(e){}
+};
+
+/* ---------------- data ---------------- */
+var DATA=null, Q=[], SUBJ=[], byCode={};
+var figPacks={}, figPending={};
+
+function boot(d){
+  DATA=d; Q=d.questions; SUBJ=d.subjects;
+  SUBJ.forEach(function(s){ byCode[s.code]=s; });
+  document.getElementById("boot").hidden=true;
+  buildRail(); buildSearchSubj();
+  setSubject(SUBJ[0].code);
+  show("practice");
+}
+
+if(window.__FIGPACKS__) figPacks=window.__FIGPACKS__;   // fully inlined offline build
+
+// Called at the very end of this script: boot() touches vars declared further
+// down, so it must not run while the script is still executing.
+function start(){
+  if(window.__QUESTIONS__){ boot(window.__QUESTIONS__); return; }
+  fetch("questions.json").then(function(r){ return r.json(); }).then(boot).catch(function(e){
+    document.getElementById("boot").textContent="โหลดข้อมูลไม่สำเร็จ: "+e;
+  });
+}
+
+function getFig(code,key,imgEl){
+  if(window.__LOCAL_FIGS__){ imgEl.src="figs/"+key+".webp"; return; }
+  if(figPacks[code]){
+    var d=figPacks[code][key];
+    if(d) imgEl.src="data:image/webp;base64,"+d; else missingFig(imgEl);
+    return;
+  }
+  if(!figPending[code]){
+    figPending[code]=fetch("figs/"+code+".json").then(function(r){ return r.json(); })
+      .then(function(j){ figPacks[code]=j; return j; })
+      .catch(function(){ figPacks[code]={}; return {}; });
+  }
+  figPending[code].then(function(j){
+    var d=j[key];
+    if(d) imgEl.src="data:image/webp;base64,"+d; else missingFig(imgEl);
+  });
+}
+/* Diagrams and picture-choices are unreadable at phone width: tap to double
+   the image and pan it inside its own scroller. */
+function wireZoom(root){
+  (root||document).querySelectorAll(".figwrap").forEach(function(w){
+    if(w.dataset.zoomWired) return;
+    w.dataset.zoomWired="1";
+    var hint=document.createElement("span");
+    hint.className="zoomhint"; hint.textContent="แตะเพื่อขยาย";
+    w.appendChild(hint);
+    w.addEventListener("click",function(){
+      var on=w.classList.toggle("zoom");
+      hint.textContent = on ? "แตะเพื่อย่อ" : "แตะเพื่อขยาย";
+      if(!on) w.scrollLeft=0;
+    });
+  });
+}
+function missingFig(imgEl){
+  var p=document.createElement("p");
+  p.className="fignote"; p.textContent="(ไม่พบรูปประกอบของข้อนี้)";
+  if(imgEl.parentNode) imgEl.parentNode.replaceChild(p,imgEl);
+}
+
+/* ---------------- views ---------------- */
+var views={practice:"view-practice",search:"view-search",stats:"view-stats"};
+function show(name){
+  Object.keys(views).forEach(function(k){
+    document.getElementById(views[k]).hidden = (k!==name);
+    document.getElementById("tab-"+k).setAttribute("aria-selected", k===name?"true":"false");
+  });
+  if(name==="stats") renderStats();
+}
+["practice","search","stats"].forEach(function(k){
+  document.getElementById("tab-"+k).onclick=function(){ show(k); };
+});
+
+/* ---------------- subject rail ---------------- */
+var curSubj=null, curTopic="*", curFilter="all", order=[], pos=0, shuffled=false;
+
+function subjProgress(code){
+  var tot=0, done=0;
+  for(var i=0;i<Q.length;i++) if(Q[i].s===code){ tot++; if(state[Q[i].i] && state[Q[i].i].r) done++; }
+  return {tot:tot,done:done};
+}
+
+function buildRail(){
+  var rail=document.getElementById("rail"); rail.innerHTML="";
+  var groups=[["พื้นฐาน","วิชาพื้นฐาน"],["เฉพาะ","วิชาเฉพาะ"]];
+  groups.forEach(function(g){
+    var list=SUBJ.filter(function(s){ return s.group===g[0]; });
+    if(!list.length) return;
+    var wrap=document.createElement("div"); wrap.className="railgroup";
+    var h=document.createElement("h3"); h.textContent=g[1]; wrap.appendChild(h);
+    var ul=document.createElement("div"); ul.className="subjlist";
+    list.forEach(function(s){
+      var p=subjProgress(s.code);
+      var b=document.createElement("button");
+      b.className="subj"; b.type="button"; b.dataset.code=s.code;
+      b.setAttribute("aria-current", s.code===curSubj ? "true":"false");
+      b.innerHTML='<span class="code">'+s.code+'</span>'+
+        '<span class="nm">'+esc(s.th)+'<span class="bar"><i style="width:'+
+        (p.tot?Math.round(p.done/p.tot*100):0)+'%"></i></span></span>'+
+        '<span class="ct">'+p.done+"/"+p.tot+'</span>';
+      b.onclick=function(){ setSubject(s.code); };
+      ul.appendChild(b);
+    });
+    wrap.appendChild(ul); rail.appendChild(wrap);
+  });
+}
+function refreshRailCounts(){
+  document.querySelectorAll("#rail .subj").forEach(function(b){
+    var p=subjProgress(b.dataset.code);
+    var ct=b.querySelector(".ct"); if(ct) ct.textContent=p.done+"/"+p.tot;
+    var bar=b.querySelector(".bar i"); if(bar) bar.style.width=(p.tot?Math.round(p.done/p.tot*100):0)+"%";
+    b.setAttribute("aria-current", b.dataset.code===curSubj ? "true":"false");
+  });
+}
+
+function setSubject(code){
+  curSubj=code; curTopic="*";
+  var topics={}, n=0;
+  Q.forEach(function(q){ if(q.s===code){ topics[q.t]=(topics[q.t]||0)+1; n++; } });
+  var sel=document.getElementById("topicsel");
+  sel.innerHTML="";
+  var o=document.createElement("option"); o.value="*"; o.textContent="ทุกหัวข้อ ("+n+" ข้อ)"; sel.appendChild(o);
+  Object.keys(topics).sort().forEach(function(t){
+    var op=document.createElement("option"); op.value=t; op.textContent=t+" ("+topics[t]+")"; sel.appendChild(op);
+  });
+  sel.onchange=function(){ curTopic=sel.value; rebuild(); };
+  refreshRailCounts(); rebuild();
+}
+
+/* filters */
+var fmap={all:"f-all",new:"f-new",wrong:"f-wrong",star:"f-star"};
+Object.keys(fmap).forEach(function(k){
+  document.getElementById(fmap[k]).onclick=function(){
+    curFilter=k;
+    Object.keys(fmap).forEach(function(j){
+      document.getElementById(fmap[j]).setAttribute("aria-pressed", j===k?"true":"false");
+    });
+    rebuild();
+  };
+});
+document.getElementById("shuffle").onclick=function(){ shuffled=!shuffled; rebuild(); };
+
+function passes(q){
+  var s=state[q.i]||{};
+  if(curFilter==="new")   return !s.r;
+  if(curFilter==="wrong") return s.w>0;
+  if(curFilter==="star")  return !!s.star;
+  return true;
+}
+function rebuild(){
+  order=Q.filter(function(q){
+    return q.s===curSubj && (curTopic==="*"||q.t===curTopic) && passes(q);
+  });
+  if(shuffled){
+    for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  }
+  pos=0; renderQ();
+}
+
+/* ---------------- question card ---------------- */
+var KEYS=["ก","ข","ค","ง","จ","ฉ"];
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+function renderQ(){
+  var card=document.getElementById("qcard");
+  if(!order.length){
+    card.innerHTML='<div class="empty">ไม่มีข้อสอบตรงเงื่อนไขนี้<br><span style="font-size:12.5px">ลองเปลี่ยนตัวกรอง หรือเลือกหัวข้ออื่น</span></div>';
+    return;
+  }
+  if(pos<0) pos=0; if(pos>=order.length) pos=order.length-1;
+  var q=order[pos], s=st(q.i), sub=byCode[q.s]||{th:q.s};
+  var answered = s.pick!=null;
+
+  var h='<div class="qhead">'+
+    '<span class="tag">'+esc(q.s)+'</span>'+
+    '<span class="topic" title="'+esc(q.t)+'">'+esc(q.t)+'</span>'+
+    '<span class="pos">ข้อ '+(pos+1)+' / '+order.length+'</span>'+
+    '</div><div class="qbody">';
+
+  h+='<p class="stem">'+esc(q.q)+'</p>';
+  if(q.f) h+='<div class="figwrap"><img alt="รูปประกอบโจทย์ (ต้นฉบับจากคลังข้อสอบสภาวิศวกร)" data-fig="'+esc(q.f)+'" data-code="'+esc(q.s)+'"></div>';
+  if(q.p) h+='<p class="fignote">ข้อนี้ตัวเลือกเป็นรูปภาพ — ดูตัวเลือก ก–ง ในรูปด้านบน</p>';
+
+  h+='<div class="opts">';
+  q.o.forEach(function(text,idx){
+    var n=idx+1, cls="opt";
+    if(answered){
+      if(n===q.a) cls+=" correct";
+      else if(n===s.pick) cls+=" wrong";
+    }
+    var label = text ? esc(text) : '<span style="color:var(--ink3)">(ดูตัวเลือกในรูป)</span>';
+    h+='<button class="'+cls+'" data-pick="'+n+'"'+(answered?" disabled":"")+'>'+
+       '<span class="k">'+(KEYS[idx]||n)+'</span><span>'+label+'</span></button>';
+  });
+  h+='</div>';
+
+  if(answered){
+    var ok = s.pick===q.a;
+    h+='<div class="verdict '+(ok?"ok":"no")+'">'+(ok?"✓ ถูกต้อง":"✕ ผิด — เฉลยคือข้อ "+(KEYS[q.a-1]||q.a))+'</div>';
+  }
+  h+='</div>';
+
+  h+='<div class="qfoot">'+
+     '<button class="btn" id="prev"'+(pos===0?" disabled":"")+'>‹ ก่อนหน้า</button>'+
+     '<button class="btn primary" id="next"'+(pos>=order.length-1?" disabled":"")+'>ถัดไป ›</button>'+
+     '<button class="btn'+(s.star?" starred":"")+'" id="star">'+(s.star?"★ ติดดาวแล้ว":"☆ ติดดาว")+'</button>'+
+     '<span class="grow"></span>';
+  if(answered) h+='<button class="btn" id="retry">ลองใหม่</button>';
+  else h+='<button class="btn" id="reveal">ขอดูเฉลย</button>';
+  h+='</div>';
+
+  card.innerHTML=h;
+
+  var img=card.querySelector("img[data-fig]");
+  if(img) getFig(img.dataset.code, img.dataset.fig, img);
+  wireZoom(card);
+
+  card.querySelectorAll("[data-pick]").forEach(function(b){
+    b.onclick=function(){
+      var n=+b.dataset.pick;
+      s.pick=n; s.r=1;
+      if(n===q.a) s.c=(s.c||0)+1; else s.w=(s.w||0)+1;
+      save(); refreshRailCounts(); renderQ();
+    };
+  });
+  var pv=card.querySelector("#prev"); if(pv) pv.onclick=function(){ pos--; renderQ(); };
+  var nx=card.querySelector("#next"); if(nx) nx.onclick=function(){ pos++; renderQ(); };
+  var stb=card.querySelector("#star"); if(stb) stb.onclick=function(){ s.star=!s.star; save(); renderQ(); };
+  var rt=card.querySelector("#retry"); if(rt) rt.onclick=function(){ s.pick=null; save(); renderQ(); };
+  var rv=card.querySelector("#reveal"); if(rv) rv.onclick=function(){
+    s.pick=q.a; s.r=1; s.revealed=1; save(); refreshRailCounts(); renderQ();
+  };
+}
+
+document.addEventListener("keydown",function(e){
+  if(document.getElementById("view-practice").hidden) return;
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName||""))) return;
+  if(e.key==="ArrowRight"){ var n=document.getElementById("next"); if(n&&!n.disabled) n.click(); }
+  if(e.key==="ArrowLeft"){ var p=document.getElementById("prev"); if(p&&!p.disabled) p.click(); }
+  var k=["1","2","3","4","5","6"].indexOf(e.key);
+  if(k>=0){ var b=document.querySelector('[data-pick="'+(k+1)+'"]'); if(b&&!b.disabled) b.click(); }
+});
+
+/* ---------------- similar-question search ---------------- */
+var IDX=null;
+
+var RE_TONE = new RegExp("[\\u0E47-\\u0E4E]", "g");      // Thai tone / diacritic marks
+var RE_KEEP = new RegExp("[^\\u0E00-\\u0E7Fa-z0-9.]+", "g");
+function grams(s){
+  s=String(s||"").toLowerCase()
+     .replace(RE_TONE,"")                     // drop tone marks: typo-tolerant matching
+     .replace(RE_KEEP," ")
+     .trim();
+  var out=[], i;
+  var nums=s.match(/\d+(?:\.\d+)?/g)||[];
+  for(i=0;i<nums.length;i++) out.push("#"+nums[i]);   // numbers as whole tokens
+  var t=s.replace(/\s+/g,"");
+  for(i=0;i+3<=t.length;i++) out.push(t.substr(i,3));
+  return out;
+}
+
+function buildIndex(){
+  var df={}, docs=[];
+  for(var i=0;i<Q.length;i++){
+    var g=grams(Q[i].q+" "+Q[i].o.join(" "));
+    var tf={};
+    for(var j=0;j<g.length;j++) tf[g[j]]=(tf[g[j]]||0)+1;
+    docs.push(tf);
+    for(var k in tf) df[k]=(df[k]||0)+1;
+  }
+  var N=Q.length, vecs=[];
+  for(i=0;i<N;i++){
+    var v={}, norm=0;
+    for(var t in docs[i]){
+      var w=(1+Math.log(docs[i][t]))*Math.log(1+N/(df[t]||1));
+      if(t.charAt(0)==="#") w*=2.6;            // numeric tokens are highly diagnostic
+      v[t]=w; norm+=w*w;
+    }
+    norm=Math.sqrt(norm)||1;
+    for(t in v) v[t]/=norm;
+    vecs.push(v);
+  }
+  IDX={df:df,N:N,vecs:vecs};
+}
+
+function search(text,subjFilter){
+  if(!IDX) buildIndex();
+  var g=grams(text);
+  if(!g.length) return [];
+  var tf={};
+  for(var i=0;i<g.length;i++) tf[g[i]]=(tf[g[i]]||0)+1;
+  var qv={}, norm=0;
+  for(var t in tf){
+    var w=(1+Math.log(tf[t]))*Math.log(1+IDX.N/(IDX.df[t]||1));
+    if(t.charAt(0)==="#") w*=2.6;
+    qv[t]=w; norm+=w*w;
+  }
+  norm=Math.sqrt(norm)||1;
+  for(t in qv) qv[t]/=norm;
+
+  var out=[];
+  for(i=0;i<Q.length;i++){
+    if(subjFilter!=="*" && Q[i].s!==subjFilter) continue;
+    var v=IDX.vecs[i], sc=0;
+    for(t in qv){ var d=v[t]; if(d) sc+=qv[t]*d; }
+    if(sc>0.03) out.push([sc,i]);
+  }
+  out.sort(function(a,b){ return b[0]-a[0]; });
+  return out.slice(0,12);
+}
+
+function buildSearchSubj(){
+  var sel=document.getElementById("searchsubj");
+  sel.innerHTML='<option value="*">ทุกวิชา</option>';
+  SUBJ.forEach(function(s){
+    var o=document.createElement("option"); o.value=s.code; o.textContent=s.th; sel.appendChild(o);
+  });
+}
+
+function renderResults(list){
+  var box=document.getElementById("results");
+  if(!list.length){
+    box.innerHTML='<div class="panel empty">ไม่พบโจทย์ที่คล้ายกัน — ลองพิมพ์ให้ยาวขึ้น หรือใส่ตัวเลขในโจทย์ด้วย</div>';
+    return;
+  }
+  box.innerHTML="";
+  list.forEach(function(pair){
+    var sc=pair[0], q=Q[pair[1]], sub=byCode[q.s]||{th:q.s};
+    var pct=Math.round(sc*100);
+    var cls = pct>=45 ? "hi" : (pct>=22 ? "mid" : "");
+    var el=document.createElement("div"); el.className="panel rescard";
+    var h='<div class="resmeta">'+
+      '<span class="score '+cls+'">ตรงกัน '+pct+'%</span>'+
+      '<span class="tag">'+esc(q.s)+'</span>'+
+      '<span class="topic" title="'+esc(q.t)+'">'+esc(sub.th)+' · '+esc(q.t)+'</span></div>';
+    h+='<p class="resq">'+esc(q.q)+'</p>';
+    if(q.f) h+='<div class="figwrap"><img alt="รูปประกอบโจทย์" data-fig="'+esc(q.f)+'" data-code="'+esc(q.s)+'"></div>';
+    var ansText=q.o[q.a-1];
+    h+='<div class="ansline"><b>เฉลย: ข้อ '+(KEYS[q.a-1]||q.a)+'</b>'+
+       (ansText? " — "+esc(ansText) : " (ดูตัวเลือกในรูป)")+'</div>';
+    var others=q.o.map(function(o,i){ return {t:o,i:i}; }).filter(function(x){ return x.i!==q.a-1 && x.t; });
+    if(others.length){
+      h+='<div class="otheropts">';
+      others.forEach(function(x){ h+='<div>'+(KEYS[x.i]||x.i+1)+". "+esc(x.t)+'</div>'; });
+      h+='</div>';
+    }
+    el.innerHTML=h;
+    box.appendChild(el);
+    var img=el.querySelector("img[data-fig]");
+    if(img) getFig(img.dataset.code, img.dataset.fig, img);
+    wireZoom(el);
+  });
+}
+
+document.getElementById("dosearch").onclick=function(){
+  var t=document.getElementById("qinput").value.trim();
+  if(!t){ renderResults([]); return; }
+  var box=document.getElementById("results");
+  box.innerHTML='<div class="panel empty">กำลังค้นหา…</div>';
+  setTimeout(function(){
+    renderResults(search(t, document.getElementById("searchsubj").value));
+  },10);
+};
+document.getElementById("clearsearch").onclick=function(){
+  document.getElementById("qinput").value="";
+  document.getElementById("results").innerHTML="";
+};
+document.getElementById("qinput").addEventListener("keydown",function(e){
+  if((e.ctrlKey||e.metaKey) && e.key==="Enter") document.getElementById("dosearch").click();
+});
+
+/* ---------------- stats ---------------- */
+function renderStats(){
+  var v=document.getElementById("view-stats");
+  var done=0,corr=0,wrong=0,star=0;
+  Q.forEach(function(q){
+    var s=state[q.i]; if(!s) return;
+    if(s.r) done++;
+    if(s.c) corr+=s.c;
+    if(s.w) wrong+=s.w;
+    if(s.star) star++;
+  });
+  var acc = (corr+wrong)? Math.round(corr/(corr+wrong)*100) : 0;
+  var h='<div class="statgrid">'+
+    '<div class="panel stat"><div class="lab">ทำไปแล้ว</div><div class="val">'+done+'<span style="font-size:14px;color:var(--ink3)"> / '+Q.length+'</span></div></div>'+
+    '<div class="panel stat"><div class="lab">ความแม่นยำ</div><div class="val">'+acc+'%</div></div>'+
+    '<div class="panel stat"><div class="lab">ตอบผิดสะสม</div><div class="val">'+wrong+'</div></div>'+
+    '<div class="panel stat"><div class="lab">ติดดาวไว้</div><div class="val">'+star+'</div></div>'+
+    '</div>';
+  h+='<div class="panel tablewrap"><table><thead><tr>'+
+     '<th>วิชา</th><th class="num">ทั้งหมด</th><th class="num">ทำแล้ว</th><th class="num">ผิด</th><th class="num">คืบหน้า</th>'+
+     '</tr></thead><tbody>';
+  SUBJ.forEach(function(s){
+    var tot=0,d=0,w=0;
+    Q.forEach(function(q){
+      if(q.s!==s.code) return; tot++;
+      var x=state[q.i]; if(!x) return;
+      if(x.r) d++; if(x.w) w+=x.w;
+    });
+    h+='<tr><td>'+esc(s.th)+' <span style="color:var(--ink3);font-size:11.5px">'+esc(s.code)+'</span></td>'+
+       '<td class="num">'+tot+'</td><td class="num">'+d+'</td><td class="num">'+w+'</td>'+
+       '<td class="num">'+(tot?Math.round(d/tot*100):0)+'%</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap">'+
+     '<button class="btn" id="resetall">ล้างความคืบหน้าทั้งหมด</button></div>'+
+     '<div class="panel stat" style="margin-top:14px"><div class="lab">ใช้งานออฟไลน์</div>'+
+     '<div id="offlinebox" style="margin-top:9px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"></div></div>';
+  v.innerHTML=h;
+  offlineUI();
+  document.getElementById("resetall").onclick=function(){
+    if(confirm("ล้างประวัติการทำข้อสอบทั้งหมด?")){ state={}; save(); refreshRailCounts(); renderStats(); rebuild(); }
+  };
+}
+
+/* ---------------- offline / PWA ---------------- */
+var swReg=null;
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js").then(function(r){ swReg=r; }).catch(function(){});
+}
+function offlineUI(){
+  var host=document.getElementById("offlinebox");
+  if(!host) return;
+  var supported = "serviceWorker" in navigator;
+  host.innerHTML = supported
+    ? '<button class="btn" id="dlall">ดาวน์โหลดรูปทั้งหมดไว้ใช้ออฟไลน์ (~13 MB)</button>'+
+      '<span id="dlstate" class="pos" style="margin-left:10px"></span>'
+    : '<span class="pos">เบราว์เซอร์นี้ไม่รองรับการเก็บออฟไลน์</span>';
+  var b=document.getElementById("dlall");
+  if(!b) return;
+  b.onclick=function(){
+    var s=document.getElementById("dlstate");
+    if(!navigator.serviceWorker.controller){ s.textContent="ยังเตรียมไม่เสร็จ ลองรีเฟรชหน้าก่อน"; return; }
+    b.disabled=true; s.textContent="กำลังดาวน์โหลด…";
+    navigator.serviceWorker.addEventListener("message",function h(e){
+      if(!e.data) return;
+      if(e.data.type==="PRECACHE_DONE"){ s.textContent="เก็บครบแล้ว ใช้ออฟไลน์ได้เลย"; b.disabled=false; }
+      if(e.data.type==="PRECACHE_FAIL"){ s.textContent="ไม่สำเร็จ: "+e.data.msg; b.disabled=false; }
+      navigator.serviceWorker.removeEventListener("message",h);
+    });
+    navigator.serviceWorker.controller.postMessage({type:"PRECACHE_FIGS"});
+  };
+}
+
+start();
+})();
+</script>
