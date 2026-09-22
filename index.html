@@ -113,7 +113,9 @@ select{cursor:pointer}
   color:var(--ink2);padding:5px 11px;border-radius:99px;cursor:pointer
 }
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-.chip.core{border-color:var(--accentLine)}
+.chip.core,.chip.sprint{border-color:var(--accentLine)}
+.daysel{display:none;gap:4px;align-items:center}
+.daysel.on{display:flex}
 .famnote{font-size:11.5px;color:var(--star);background:var(--starSoft);border:1px solid var(--starLine);border-radius:5px;padding:2px 7px;font-weight:500}
 :root[data-theme="dark"] .chip[aria-pressed="true"],
 :root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#08181C}
@@ -238,12 +240,22 @@ td.num,th.num{text-align:right;font-family:"IBM Plex Mono",monospace}
         <div class="panel toolbar">
           <select id="topicsel" aria-label="เลือกหัวข้อ"></select>
           <div class="chips" role="group" aria-label="กรองข้อสอบ">
-            <button class="chip core" id="f-core" aria-pressed="true">ชุดแกน</button>
+            <button class="chip sprint" id="f-sprint" aria-pressed="true">แผน 250</button>
+            <button class="chip core" id="f-core" aria-pressed="false">ชุดแกน</button>
             <button class="chip" id="f-all" aria-pressed="false">ทั้งหมด</button>
             <button class="chip" id="f-new" aria-pressed="false">ยังไม่ได้ทำ</button>
             <button class="chip" id="f-wrong" aria-pressed="false">เคยตอบผิด</button>
             <button class="chip" id="f-star" aria-pressed="false">ติดดาว</button>
           </div>
+          <span class="daysel" id="daysel">
+            <label for="daypick" class="pos">วันที่</label>
+            <select id="daypick" aria-label="เลือกวันที่ของแผน">
+              <option value="*">ทุกวัน</option>
+              <option value="1">1 · CM</option><option value="2">2 · CM</option>
+              <option value="3">3 · STAT</option><option value="4">4 · STAT</option>
+              <option value="5">5 · THEO</option>
+            </select>
+          </span>
           <span class="grow"></span>
           <button class="btn" id="shuffle">สุ่มลำดับ</button>
         </div>
@@ -306,9 +318,11 @@ function boot(d){
   document.getElementById("boot").hidden=true;
   var core=d.questions.filter(function(x){return x.k;}).length;
   var bs=document.getElementById("brandsub");
-  if(bs) bs.textContent=Q.length.toLocaleString()+" ข้อ · ชุดแกน "+core.toLocaleString()+" ข้อ";
+  var sp=d.questions.filter(function(x){return x.sp;}).length;
+  if(bs) bs.textContent="แผน "+sp+" ข้อ · ชุดแกน "+core.toLocaleString()+" · คลัง "+Q.length.toLocaleString();
   buildRail(); buildSearchSubj();
-  setSubject(SUBJ[0].code);
+  curSubj=SUBJ[0].code; jumpToSprintSubject(); setSubject(curSubj);
+  document.getElementById("daysel").classList.add("on");
   show("practice");
 }
 
@@ -376,9 +390,13 @@ function show(name){
 });
 
 /* ---------------- subject rail ---------------- */
-var curSubj=null, curTopic="*", curFilter="core", order=[], pos=0, shuffled=false;
+var curSubj=null, curTopic="*", curFilter="sprint", curDay="*", order=[], pos=0, shuffled=false;
 
-function inScope(q){ return curFilter==="core" ? !!q.k : true; }
+function inScope(q){
+  if(curFilter==="sprint") return !!q.sp && (curDay==="*" || q.day===+curDay);
+  if(curFilter==="core")   return !!q.k;
+  return true;
+}
 function subjProgress(code){
   var tot=0, done=0;
   for(var i=0;i<Q.length;i++){
@@ -419,9 +437,20 @@ function refreshRailCounts(){
     var ct=b.querySelector(".ct"); if(ct) ct.textContent=p.done+"/"+p.tot;
     var bar=b.querySelector(".bar i"); if(bar) bar.style.width=(p.tot?Math.round(p.done/p.tot*100):0)+"%";
     b.setAttribute("aria-current", b.dataset.code===curSubj ? "true":"false");
+    b.style.opacity = p.tot ? "" : ".38";     // outside the active plan/filter
   });
 }
 
+function sprintSubjects(){
+  var seen={}, out=[];
+  Q.forEach(function(q){ if(q.sp && !seen[q.s]){ seen[q.s]=1; out.push(q.s); } });
+  return out;
+}
+function jumpToSprintSubject(){
+  var has=Q.some(function(q){ return q.s===curSubj && inScope(q); });
+  if(has) return;
+  for(var i=0;i<Q.length;i++) if(inScope(Q[i])){ curSubj=Q[i].s; return; }
+}
 function setSubject(code){
   curSubj=code; curTopic="*";
   var topics={}, n=0;
@@ -437,20 +466,26 @@ function setSubject(code){
 }
 
 /* filters */
-var fmap={core:"f-core",all:"f-all",new:"f-new",wrong:"f-wrong",star:"f-star"};
+var fmap={sprint:"f-sprint",core:"f-core",all:"f-all",new:"f-new",wrong:"f-wrong",star:"f-star"};
 Object.keys(fmap).forEach(function(k){
   document.getElementById(fmap[k]).onclick=function(){
     curFilter=k;
     Object.keys(fmap).forEach(function(j){
       document.getElementById(fmap[j]).setAttribute("aria-pressed", j===k?"true":"false");
     });
+    document.getElementById("daysel").classList.toggle("on", k==="sprint");
+    if(k==="sprint") jumpToSprintSubject();
     setSubject(curSubj);
   };
 });
 document.getElementById("shuffle").onclick=function(){ shuffled=!shuffled; rebuild(); };
+document.getElementById("daypick").onchange=function(){
+  curDay=this.value; jumpToSprintSubject(); setSubject(curSubj);
+};
 
 function passes(q){
   var s=state[q.i]||{};
+  if(curFilter==="sprint") return inScope(q);
   if(curFilter==="core")  return !!q.k;
   if(curFilter==="new")   return !s.r;
   if(curFilter==="wrong") return s.w>0;
@@ -461,7 +496,10 @@ function rebuild(){
   order=Q.filter(function(q){
     return q.s===curSubj && (curTopic==="*"||q.t===curTopic) && passes(q);
   });
-  order.sort(function(a,b){ return a.pr-b.pr; });   // most-distinct themes first
+  order.sort(function(a,b){
+    if(curFilter==="sprint") return (a.sp||1e9)-(b.sp||1e9);
+    return a.pr-b.pr;                                   // most-distinct themes first
+  });
   if(shuffled){
     for(var i=order.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=order[i]; order[i]=order[j]; order[j]=t; }
   }
